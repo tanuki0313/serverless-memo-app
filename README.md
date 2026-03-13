@@ -14,18 +14,23 @@ CloudFormation を用いて、サーバーレス構成（Cognito / API Gateway /
 ![構成図](images/serverless.png)
 
 ## 検証時の構成
-- 上記構成図の通り
+- リージョン: ap-northeast-1（東京）
+- Lambda ランタイム: Node.js 20.x
+- DynamoDB: PAY_PER_REQUEST（オンデマンド）
+- CloudFront: HTTPS強制 / CachingDisabled（APIルート）
 
 ## 使用技術
 ### AWS
 - **Cognito**  
-  - 認証用
+  - JWT認証 / Hosted UI（OAuth 2.0）
 - **CloudFront**  
   - S3 からの静的コンテンツ配信および API Gateway へのリクエスト転送
 - **S3**  
   - 静的コンテンツ保持用
 - **API Gateway**  
   - API リクエストを受信し Lambda を呼び出す
+- **Lambda**  
+  - Node.js 20.x / メモの CRUD 処理
 - **DynamoDB**  
   - メモデータ保存用
 - **AWS CloudFormation**  
@@ -48,11 +53,11 @@ CloudFormation を用いて、サーバーレス構成（Cognito / API Gateway /
 ## デプロイ方法
 1. CloudFormation でスタックを作成
 2. **作成順序**  
-   1. `cognito-stack`  
-   2. `dynamodb-stack`  
-   3. `lambda-stack`  
-   4. `api-stack`  
-   5. `frontend-stack`
+   1. `dynamodb-stack`  
+   2. `lambda-stack`  
+   3. `api-stack`  
+   4. `frontend-stack`  
+   5. `cognito-stack`（`MemoFrontendUrl` を参照するため最後）
 3. S3 に静的コンテンツと Lambda 関数ファイルをアップロード
 
 ## 工夫・学習したポイント
@@ -108,4 +113,4 @@ AWS Lambda 実行時に以下のエラーが発生した：
 
 Runtime.ImportModuleError: Cannot find module 'aws-sdk'
 
-**解決策**：aws-sdk を Lambda デプロイパッケージに同梱してアップロード
+**解決策**：`package.json` に `@aws-sdk/client-dynamodb` を定義し、`npm install` 後に `node_modules` ごと zip に含めて S3 にアップロード
