@@ -71,7 +71,7 @@ CloudFormation を用いて、サーバーレス構成（Cognito / API Gateway /
 ### 問題1
 CloudFront 経由で `GET /memos` が 401 Unauthorized エラーとなった。  
 
-**解決策**：CloudFront → ビヘイビア → オリジンリクエストポリシーに `Authorization` ヘッダーを Allowlist に追加
+**解決策**：CloudFront → ビヘイビア → キャッシュポリシーを `CachingDisabled` に変更し、オリジンリクエストポリシーを `AllViewerExceptHostHeader` に設定することで全ヘッダー（Authorization含む）を転送
 
 ### 問題2
 API Gateway に直接リクエストしても 403 Forbidden が返ってきた。  
