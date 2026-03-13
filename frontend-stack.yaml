@@ -103,10 +103,10 @@ Resources:
             CachedMethods:
               - GET
               - HEAD
-            ForwardedValues:
-              QueryString: true
-              Headers:
-                - Authorization
+            # キャッシュ無効（APIは毎回最新データを返す必要があるため）
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad  # CachingDisabled
+            # Authorization含む全ヘッダーを転送（Hostヘッダーを除く）
+            OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac  # AllViewerExceptHostHeader
         # SPA 用：存在しないパスでも index.html を返す
         CustomErrorResponses:
           - ErrorCode: 403
