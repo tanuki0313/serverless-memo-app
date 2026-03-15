@@ -100,6 +100,7 @@ Lambda が `Runtime.HandlerNotFound` エラーで 500 Internal Server Error を�
 
 ### 問題6
 メモ一覧が表示されず空配列が返る。
+
 **原因**：トークンが期限切れだったため、GET リクエストが 401 エラーになり空配列が返っていた。
 **解決策**：再ログインしてid_tokenを再取得後に正常表示を確認
 
