@@ -116,4 +116,4 @@ AWS Lambda 実行時に以下のエラーが発生した：
 Runtime.ImportModuleError: Cannot find module 'aws-sdk'
 
 **原因**：Node.js 20.x では `aws-sdk` v2 が Lambda ランタイムに含まれなくなったため、デプロイパッケージに同梱する必要がある。  
-**解決策**：`package.json` に `@aws-sdk/client-dynamodb` を定義し、`npm install` 後に `node_modules` ごと zip に含めて S3 にアップロード
+**解決策**：`@aws-sdk/client-dynamodb` を依存関係に追加し、`node_modules` ごとパッケージ化して Lambda にデプロイ
