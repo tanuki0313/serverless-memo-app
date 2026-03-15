@@ -17,7 +17,7 @@ CloudFormation を用いて、サーバーレス構成（Cognito / API Gateway /
 - リージョン: ap-northeast-1（東京）
 - Lambda ランタイム: Node.js 20.x
 - DynamoDB: PAY_PER_REQUEST（オンデマンド=使用した分料金発生）
-- CloudFront: HTTPS強制 / CachingDisabled（APIルートはキャッシュ無効）
+- CloudFront: HTTPS強制 / CachingDisabled（APIルートはユーザーごとに異なるデータを返すためキャッシュ無効）
 
 ## 使用技術
 ### AWS
