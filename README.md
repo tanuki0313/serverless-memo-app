@@ -57,7 +57,7 @@ CloudFormation を用いて、サーバーレス構成（Cognito / API Gateway /
    2. `lambda-stack`  
    3. `api-stack`  
    4. `frontend-stack`  
-   5. `cognito-stack`（`MemoFrontendUrl` を参照するため最後）
+   5. `cognito-stack`（`MemoFrontendUrlWithSlash` を参照するため最後）
 3. S3 に静的コンテンツと Lambda 関数ファイルをアップロード
 
 ## 工夫・学習したポイント
