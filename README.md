@@ -81,42 +81,36 @@ API Gateway に直接リクエストしても 403 Forbidden が返ってきた�
 **解決策**：URL にステージ名 `/dev` を含め、`https://{id}.execute-api.ap-northeast-1.amazonaws.com/dev/memos` に修正
 
 ### 問題3
-Cognito でトークン取得時に `USER_PASSWORD_AUTH flow not enabled for this client` エラーが発生した。  
-
-**原因**：Cognito のアプリクライアントはデフォルトで `USER_PASSWORD_AUTH` フローが無効になっており、明示的に有効化しないと使用できない。  
-**解決策**：Cognito → ユーザープール → アプリクライアント → 認証フローで `USER_PASSWORD_AUTH` を有効化
-
-### 問題4
 Lambda が `Runtime.HandlerNotFound` エラーで 500 Internal Server Error を返す。  
 
 **原因**：Lambda のハンドラー設定が `memo-lambda.handler` になっていたが、実際のファイルは `lambda/` サブフォルダ内にあったため、Lambda がファイルを見つけられなかった。  
 **解決策**：Lambda のランタイム設定のハンドラーを `lambda/memo-lambda.handler` に修正
 
-### 問題5
+### 問題4
 フロントエンドからのリクエストが 401 Unauthorized となった（トークンの種類が違う）。  
 
 **原因**：`access_token` はスコープベースの認可用トークンであり、API Gateway の Cognito オーソライザーはユーザー情報（sub・email など）を含む `id_token` を要求する。  
 **解決策**：`login.js` で `access_token` ではなく `id_token` を保存
 
-### 問題6
+### 問題5
 フロントエンドで `Authorization: Bearer {token}` を送ったが 401 Unauthorized となった。  
 
 **原因**：API Gateway の Cognito オーソライザーはトークンをそのまま検証するため、`Bearer ` プレフィックスが付いていると検証に失敗する。  
 **解決策**：API Gateway の Cognito オーソライザーが `Bearer` プレフィックスなしを要求していたため、`api.js` を修正
 
-### 問題7
+### 問題6
 メモ一覧が表示されず空配列が返る。  
 
 **原因**：以前 `access_token` で保存したデータの `userId` と、`id_token` に切り替え後の `userId`（sub）が異なるため、DynamoDB の検索結果が空になっていた。  
 **解決策**：`id_token` に切り替え後に新規データを追加することで正常表示を確認
 
-### 問題8
+### 問題7
 メモ追加後、一覧がすぐ更新されず再ログインすると表示される。  
 
 **原因**：CloudFront が GET レスポンスをキャッシュしていたため、追加直後は古いデータが返り続けていた。  
 **解決策**：CloudFront → ビヘイビア → キャッシュポリシーを `CachingDisabled` に変更、オリジンリクエストポリシーを `AllViewerExceptHostHeader` に設定
 
-### 問題9
+### 問題8
 AWS Lambda 実行時に以下のエラーが発生した：
 
 Runtime.ImportModuleError: Cannot find module 'aws-sdk'
